@@ -50,14 +50,14 @@ def get_post(id: int, response: Response):
                             detail=f"post with id: {id} was not found")
     return {"post_detail":post}
 
-@app.delete("/posts/{id}")
+@app.delete("/posts/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_post(id: int):
     post = delete_post_fun(id)
-    if not post:
+    if post == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"the post with id: {id} is not avaliable")
+                            detail=f"post with id: {id} does not exist")
     my_posts.pop(post)
-    return {"message":"Post was successfully deleted"}
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
     
      
 
