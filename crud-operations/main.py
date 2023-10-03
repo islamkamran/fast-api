@@ -21,9 +21,9 @@ def find_id(id):
         if p["id"]==id:
             return p
         
-def delete_post(id):
-    for p in my_posts:
-        if p["id"]==id:
+def delete_post_fun(id):
+    for p,val in enumerate(my_posts):
+        if val["id"]==id:
             return p
 
 # @ is for decorator
@@ -51,9 +51,14 @@ def get_post(id: int, response: Response):
     return {"post_detail":post}
 
 @app.delete("/posts/{id}")
-def delete_post(id):
-    post = delete_post(id)
-    # time 2.00 episode 19
+def delete_post(id: int):
+    post = delete_post_fun(id)
+    if not post:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"the post with id: {id} is not avaliable")
+    my_posts.pop(post)
+    return {"message":"Post was successfully deleted"}
+    
      
 
 # to run
